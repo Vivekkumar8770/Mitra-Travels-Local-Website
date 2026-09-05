@@ -22,7 +22,7 @@ export default async function Home() {
     "https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=2200&q=85",
   ].join("\n")).split(/\r?\n|,/).map((image) => image.trim()).filter(Boolean).slice(0, 6);
   return (
-    <main>
+    <main className="home-page">
       <section className="hero-section">
         {heroImages.map((image, index) => <img key={image} src={image} alt={index === 0 ? "A scenic Himalayan road journey" : "Nepal mountain landscape"} className={`hero-image hero-image-slide hero-image-slide-${index + 1}`} />)}
         <div className="hero-overlay" />
