@@ -28,3 +28,11 @@ export function getLocalMedia(id: number) {
   const asset = assets.find((item) => item.id === id);
   return asset ? { asset, data: files.get(asset.storageKey) } : null;
 }
+
+export function deleteLocalMedia(id: number) {
+  const index = assets.findIndex((item) => item.id === id);
+  if (index < 0) return false;
+  const [asset] = assets.splice(index, 1);
+  files.delete(asset.storageKey);
+  return true;
+}

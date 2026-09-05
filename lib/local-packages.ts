@@ -12,3 +12,7 @@ export function saveLocalPackage(item: TourPackage) {
   packages.set(item.slug, saved);
   return saved;
 }
+
+export function deleteLocalPackage(slug: string) {
+  return packages.delete(slug);
+}

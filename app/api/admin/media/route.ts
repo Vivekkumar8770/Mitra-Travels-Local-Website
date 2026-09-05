@@ -1,9 +1,9 @@
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { env } from "cloudflare:workers";
 import { getDb } from "@/db";
 import { mediaAssets } from "@/db/schema";
 import { requireAdminApi } from "@/lib/admin-auth";
-import { addLocalMedia, listLocalMedia } from "@/lib/local-media";
+import { addLocalMedia, deleteLocalMedia, listLocalMedia } from "@/lib/local-media";
 
 type Bucket = { put(key: string, value: ArrayBuffer, options?: { httpMetadata?: { contentType?: string } }): Promise<unknown> };
 const localDevelopment = process.env.NODE_ENV !== "production";
@@ -27,4 +27,19 @@ export async function POST(request: Request) {
     console.error("Admin media upload failed", error);
     return Response.json({ error: "Media upload failed. Check the BUCKET R2 binding and media_assets database migration." }, { status: 500 });
   }
+}
+
+export async function DELETE(request: Request) {
+  const admin = await requireAdminApi(); if (!admin) return Response.json({ error: "Unauthorized" }, { status: 401 });
+  const id = Number(new URL(request.url).searchParams.get("id"));
+  if (!Number.isInteger(id) || id < 1) return Response.json({ error: "Invalid media asset." }, { status: 400 });
+  if (localDevelopment) return deleteLocalMedia(id) ? Response.json({ ok: true }) : Response.json({ error: "Media asset not found." }, { status: 404 });
+  const db = getDb();
+  const [asset] = await db.select({ storageKey: mediaAssets.storageKey }).from(mediaAssets).where(eq(mediaAssets.id, id)).limit(1);
+  if (!asset) return Response.json({ error: "Media asset not found." }, { status: 404 });
+  const bucket = (env as unknown as { BUCKET?: { delete(key: string): Promise<void> } }).BUCKET;
+  if (!bucket) return Response.json({ error: "Media storage is not available. Check the BUCKET R2 binding." }, { status: 503 });
+  await bucket.delete(asset.storageKey);
+  await db.delete(mediaAssets).where(eq(mediaAssets.id, id));
+  return Response.json({ ok: true });
 }

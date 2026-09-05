@@ -454,6 +454,7 @@ body:not(:has(.admin-route)) .cta-panel { padding: clamp(2rem, 5vw, 4rem); }
 .crm-lead-form .editor-footer { justify-content: flex-end; }
 .badges .status-new{background:#fff1e7;color:#c2410c}.badges .status-contacted{background:#eef4fb;color:#24527d}.badges .status-follow-up{background:#fef3c7;color:#a16207}.badges .status-quoted{background:#ede9fe;color:#6d28d9}.badges .status-converted,.badges .status-confirmed{background:#e9f8ef;color:#16834d}.badges .status-closed{background:#f1f5f9;color:#64748b}
 .faq-trigger>svg{display:none}
+.media-card>div{position:relative}.media-delete{position:absolute;right:0;bottom:0;width:30px;height:30px}
 
 .home-popular-section{padding-block:4.75rem 5.25rem}.home-popular-section .popular-carousel{margin-top:1.35rem}.home-popular-section .popular-carousel-controls{align-items:center;margin-bottom:.7rem}.home-popular-section .popular-carousel-actions{display:flex;align-items:center;gap:1rem}.home-popular-section .popular-carousel-arrows{gap:.4rem}.home-popular-section .popular-carousel-controls button{width:36px;height:36px}.home-popular-section .popular-carousel-track{padding-top:.1rem}
 @media(max-width:767px){.home-popular-section{padding-block:4rem 4.5rem}.home-popular-section .popular-carousel-controls{align-items:flex-start}.home-popular-section .popular-carousel-actions{display:grid;width:100%;justify-items:end;gap:.5rem}}
