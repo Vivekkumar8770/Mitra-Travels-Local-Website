@@ -30,10 +30,10 @@ export type BlogPost = {
 export type JourneyPurposeCard = { id?: number; title: string; description: string; icon: string; buttonText: string; destinationUrl: string; linkType: "internal" | "external"; openInNewTab: boolean; displayOrder: number; active: boolean };
 
 export const defaultJourneyPurposeCards: JourneyPurposeCard[] = [
-  { title: "Pilgrimage journeys", description: "Muktinath, Pashupatinath, Janakpur and sacred routes planned with care.", icon: "ShieldCheck", buttonText: "Explore journey", destinationUrl: "/packages/muktinath-pilgrimage-journey", linkType: "internal", openInNewTab: false, displayOrder: 1, active: true },
-  { title: "Heritage & culture", description: "Kathmandu temples, Lumbini, local streets and meaningful experiences.", icon: "MapPinned", buttonText: "Explore journey", destinationUrl: "/packages/kathmandu-pokhara-discovery", linkType: "internal", openInNewTab: false, displayOrder: 2, active: true },
-  { title: "Mountains & lakes", description: "Pokhara, Himalayan landscapes and scenic Nepal road journeys.", icon: "Sparkles", buttonText: "Explore journey", destinationUrl: "/packages/kathmandu-pokhara-discovery", linkType: "internal", openInNewTab: false, displayOrder: 3, active: true },
-  { title: "Cross-border road trips", description: "Comfortable private travel from Raxaul with practical border support.", icon: "Route", buttonText: "Explore journey", destinationUrl: "/packages", linkType: "internal", openInNewTab: false, displayOrder: 4, active: true },
+  { title: "Pilgrimage journeys", description: "Muktinath, Pashupatinath, Janakpur and sacred routes planned with care.", icon: "ShieldCheck", buttonText: "Explore journey", destinationUrl: "https://www.mitratravels.com/packages/kathmandu-pokhara-muktinath-tour-7-days", linkType: "external", openInNewTab: false, displayOrder: 1, active: true },
+  { title: "Heritage & culture", description: "Kathmandu temples, Lumbini, local streets and meaningful experiences.", icon: "MapPinned", buttonText: "Explore journey", destinationUrl: "https://www.mitratravels.com/packages/kathmandu-tour-from-raxaul-3-days", linkType: "external", openInNewTab: false, displayOrder: 2, active: true },
+  { title: "Mountains & lakes", description: "Pokhara, Himalayan landscapes and scenic Nepal road journeys.", icon: "Sparkles", buttonText: "Explore journey", destinationUrl: "https://www.mitratravels.com/packages/kathmandu-pokhara-tour-from-raxaul-5-days", linkType: "external", openInNewTab: false, displayOrder: 3, active: true },
+  { title: "Cross-border road trips", description: "Comfortable private travel from Raxaul with practical border support.", icon: "Route", buttonText: "Explore journey", destinationUrl: "https://www.mitratravels.com/packages/kathmandu-pokhara-tour-from-raxaul-5-days", linkType: "external", openInNewTab: false, displayOrder: 4, active: true },
 ];
 
 export const packages: TourPackage[] = [
