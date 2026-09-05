@@ -29,8 +29,8 @@ export function SiteHeader({ settings }: { settings: PublicSettings }) {
         <Sheet>
           <SheetTrigger className="grid size-11 place-items-center rounded-full border border-white/20 text-white lg:hidden" aria-label="Open navigation"><Menu className="size-5" /></SheetTrigger>
             <SheetContent className="mobile-menu-sheet border-l-white/10 bg-[#06162b] text-white">
-            <SheetHeader><SheetTitle className="text-white">Explore Mitra Travels</SheetTitle></SheetHeader>
-            <nav className="flex flex-col px-4" aria-label="Mobile navigation">{links.map(([label, href]) => <SheetClose key={href} asChild><Link href={href} className={`mobile-nav-link ${isActive(href) ? "is-active" : ""}`} aria-current={isActive(href) ? "page" : undefined}>{label}</Link></SheetClose>)}</nav>
+            <SheetHeader className="mobile-menu-header"><span className="mobile-menu-eyebrow">Mitra Travels</span><SheetTitle className="text-white">Explore your next journey</SheetTitle><p>India & Nepal tours, planned around you.</p></SheetHeader>
+            <nav className="mobile-menu-nav flex flex-col px-4" aria-label="Mobile navigation">{links.map(([label, href]) => <SheetClose key={href} asChild><Link href={href} className={`mobile-nav-link ${isActive(href) ? "is-active" : ""}`} aria-current={isActive(href) ? "page" : undefined}><span>{label}</span><b aria-hidden="true">→</b></Link></SheetClose>)}</nav>
             <div className="mobile-menu-actions mt-auto space-y-3 p-4"><div className="mobile-socials">{socialLinks.filter(([, , url]) => Boolean(url)).map(([Icon, label, url]) => <a key={label} href={url} target="_blank" rel="noreferrer"><Icon aria-hidden="true" /><span>{label}</span></a>)}</div><a href={`tel:${settings.phoneRaw}`} className="btn btn-outline w-full">Call {settings.phone}</a><SheetClose asChild><Link href="/contact#enquiry" className="btn btn-primary w-full">Plan my trip</Link></SheetClose></div>
           </SheetContent>
         </Sheet>
