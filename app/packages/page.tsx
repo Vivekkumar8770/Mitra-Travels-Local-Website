@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { PackageBrowser } from "@/components/package-browser";
 import { getPublicPackages } from "@/lib/store";
 
-export const metadata: Metadata = { title: "Nepal Tour Packages from Raxaul | India & Nepal Tours", description: "Explore Nepal tour packages from Raxaul, Raxaul to Kathmandu tours, Pokhara and India travel packages from Mitra Travels." };
+export const metadata: Metadata = { title: "Nepal Tour Packages from Raxaul | India & Nepal Tours", description: "Explore Nepal tour packages from Raxaul, including Kathmandu, Pokhara, Janakpur and Muktinath routes, with private transport and custom itineraries.", keywords: ["Nepal tour packages from Raxaul", "Kathmandu Pokhara tour", "Janakpur tour from Raxaul", "Muktinath pilgrimage package", "India Nepal private tour"], alternates: { canonical: "/packages" } };
 
 export default async function PackagesPage() {
   const items = await getPublicPackages();

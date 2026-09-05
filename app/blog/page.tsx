@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowUpRight, CalendarDays } from "lucide-react";
 import { getPublicBlogPosts } from "@/lib/store";
 
-export const metadata: Metadata = { title: "Travel Blog", description: "Helpful India and Nepal travel guides, seasonal tips and road-trip planning advice from Mitra Travels." };
+export const metadata: Metadata = { title: "India & Nepal Travel Blog | Mitra Travels", description: "Read practical India and Nepal travel guides, border preparation tips, seasonal advice and road-trip planning ideas from Mitra Travels.", keywords: ["India Nepal travel blog", "Nepal travel tips from Raxaul", "Raxaul border travel guide", "Nepal road trip advice"], alternates: { canonical: "/blog" } };
 
 export default async function BlogPage() {
   const posts = await getPublicBlogPosts();

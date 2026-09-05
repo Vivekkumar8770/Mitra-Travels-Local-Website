@@ -4,14 +4,14 @@ import { ArrowRight, MessageCircle, Minus, Phone, Plus, ShieldCheck } from "luci
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { getPublicFaqs, getPublicSettings } from "@/lib/store";
 
-export const metadata: Metadata = { title: "Frequently Asked Questions", description: "Answers about Mitra Travels packages, customisation, hotels, quotations and India–Nepal tours." };
+export const metadata: Metadata = { title: "Nepal Tour FAQs | Packages, Hotels & Transport | Mitra Travels", description: "Find answers about Nepal tour packages from Raxaul, custom itineraries, hotels, transport, quotations and the Mitra Travels enquiry process.", keywords: ["Nepal tour FAQs", "Raxaul travel questions", "Nepal package hotel inclusion", "Raxaul car rental FAQ"], alternates: { canonical: "/faqs" } };
 export default async function FaqPage() {
 	const [faqs, settings] = await Promise.all([getPublicFaqs(), getPublicSettings()]);
 	const phone = settings.phone || "+91 75458 59616";
 	const phoneRaw = settings.phoneRaw || "917545859616";
 	const whatsappUrl = `https://wa.me/${phoneRaw.replace("+", "")}`;
 
-	return <main className="faq-page">
+	return <main className="faq-page"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map((item) => ({ "@type": "Question", name: item.question, acceptedAnswer: { "@type": "Answer", text: item.answer } })) }) }} />
 		<section className="page-hero faq-hero"><div className="container-shell page-hero-inner"><p className="eyebrow text-orange-300">Before you travel</p><h1>Frequently Asked Questions</h1><p>Clear answers about custom packages, hotels, transport, quotations and the enquiry process.</p></div></section>
 		<section className="faq-intro"><div className="container-shell"><p className="section-kicker">Plan with confidence</p><h2>Common Questions, Clear Answers</h2><p>Everything you need to know before planning your journey with Mitra Travels.</p></div></section>
 		<section className="faq-main-section"><div className="container-shell faq-layout">

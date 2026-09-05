@@ -3,6 +3,14 @@ import { ArrowRight, BadgeCheck, Headphones, MapPinned, Phone, Route, ShieldChec
 import { PopularJourneysCarousel } from "@/components/popular-journeys-carousel";
 import { getPublicPackages, getPublicSettings } from "@/lib/store";
 import { getGoogleReviews } from "@/lib/google-reviews";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Nepal Tour Packages from Raxaul | Mitra Travels",
+  description: "Plan private Nepal tours from Raxaul, including Kathmandu, Pokhara, Janakpur and Muktinath journeys with reliable transport and flexible itineraries.",
+  keywords: ["Nepal tour packages from Raxaul", "Raxaul to Kathmandu tour", "Nepal taxi service from Raxaul", "Muktinath tour from Raxaul", "Pokhara tour package"],
+  alternates: { canonical: "/" },
+};
 
 function JourneyCollectionCard({ Icon, title, copy, href, crossBorder }: { Icon: typeof ShieldCheck; title: string; copy: string; href: string; crossBorder?: boolean }) {
   const card = <Link href={href} className="journey-collection-card"><span className="journey-collection-icon"><Icon /></span><span><h3>{title}</h3><p>{copy}</p><span className="journey-collection-link">Explore journey <ArrowRight className="size-4" /></span></span></Link>;

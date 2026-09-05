@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "About Mitra Travels | Raxaul Travel Agency for India & Nepal",
   description: "Learn about Mitra Travels, a trusted Raxaul, Bihar travel agency offering Nepal tour packages, taxi service, car rental and complete India-Nepal travel assistance.",
   keywords: ["Raxaul travel agency", "Mitra Travels Raxaul", "Nepal tour package from Raxaul", "Raxaul to Nepal taxi service", "car rental in Raxaul"],
+  alternates: { canonical: "/about" },
 };
 
 const services = [
