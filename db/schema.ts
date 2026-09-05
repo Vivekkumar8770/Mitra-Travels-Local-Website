@@ -6,7 +6,7 @@ export const tourPackages = sqliteTable("tour_packages", {
 }, (table) => [uniqueIndex("uq_tour_packages_slug").on(table.slug), index("idx_tour_packages_country_active").on(table.country, table.active)]);
 
 export const blogPostsTable = sqliteTable("blog_posts", {
-  id: integer("id").primaryKey({ autoIncrement: true }), slug: text("slug").notNull(), title: text("title").notNull(), excerpt: text("excerpt").notNull().default(""), content: text("content").notNull().default(""), category: text("category").notNull().default("Travel Guide"), publishedAt: text("published_at").notNull(), active: integer("active", { mode: "boolean" }).notNull().default(true), createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`), updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  id: integer("id").primaryKey({ autoIncrement: true }), slug: text("slug").notNull(), title: text("title").notNull(), excerpt: text("excerpt").notNull().default(""), content: text("content").notNull().default(""), category: text("category").notNull().default("Travel Guide"), publishedAt: text("published_at").notNull(), imageUrl: text("image_url").notNull().default(""), active: integer("active", { mode: "boolean" }).notNull().default(true), createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`), updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 }, (table) => [uniqueIndex("uq_blog_posts_slug").on(table.slug), index("idx_blog_posts_active_date").on(table.active, table.publishedAt)]);
 
 export const faqItems = sqliteTable("faq_items", {

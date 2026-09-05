@@ -9,7 +9,7 @@ type PackageRow = typeof tourPackages.$inferSelect;
 type BlogRow = typeof blogPostsTable.$inferSelect;
 function safeJson<T>(value: string, fallback: T): T { try { return JSON.parse(value) as T; } catch { return fallback; } }
 export function rowToPackage(row: PackageRow): TourPackage { return { id: row.id, slug: row.slug, country: row.country === "India" ? "India" : "Nepal", title: row.title, duration: row.duration, summary: row.summary, route: row.route, highlights: safeJson(row.highlightsJson, []), itinerary: safeJson(row.itineraryJson, []), inclusions: safeJson(row.inclusionsJson, []), exclusions: safeJson(row.exclusionsJson, []), featured: row.featured, active: row.active, imageUrl: row.imageUrl }; }
-export function rowToBlog(row: BlogRow): BlogPost { return { id: row.id, slug: row.slug, title: row.title, excerpt: row.excerpt, content: row.content, category: row.category, publishedAt: row.publishedAt, active: row.active }; }
+export function rowToBlog(row: BlogRow): BlogPost { return { id: row.id, slug: row.slug, title: row.title, excerpt: row.excerpt, content: row.content, category: row.category, publishedAt: row.publishedAt, imageUrl: row.imageUrl, active: row.active }; }
 
 export async function getAllPackages(): Promise<TourPackage[]> {
   const local = process.env.NODE_ENV !== "production" ? listLocalPackages() : [];
