@@ -101,7 +101,7 @@ export function AdminDashboard() {
     <aside className={`admin-sidebar ${sidebar?"is-open":""}`}>
       <div className="admin-brand"><div className="admin-brand-mark">MT</div><div><b>Mitra Travels</b><span>Admin CMS</span></div><button className="admin-mobile-close" onClick={()=>setSidebar(false)}><X/></button></div>
       <nav>{navigationGroups.map((group)=><div className="admin-nav-group" key={group.label}><span className="admin-nav-group-label">{group.label}</span>{group.items.map(([id,label,Icon])=><button key={id} className={section===id?"active":""} onClick={()=>{setSection(id);setSidebar(false)}}><Icon/><span>{label}</span>{section===id&&<i aria-hidden="true"/>}</button>)}</div>)}</nav>
-      <div className="admin-sidebar-footer"><span>Website CMS</span><small>Manage without code</small><a href="/" target="_blank">Open public website ↗</a></div>
+      <div className="admin-sidebar-footer"><div className="admin-sidebar-footer-heading"><span className="admin-sidebar-footer-mark">MT</span><span><b>Mitra Travels</b><small>Control room</small></span></div><div className="admin-sidebar-status"><i/> <span>Workspace ready</span></div><a href="/" target="_blank"><span>View live website</span><b>↗</b></a></div>
     </aside>
     {sidebar && <button className="admin-backdrop" aria-label="Close menu" onClick={()=>setSidebar(false)}/>}
     <main className="admin-main">
