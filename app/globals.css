@@ -376,6 +376,16 @@ body:not(:has(.admin-route)) .cta-panel { padding: clamp(2rem, 5vw, 4rem); }
   .testimonials-grid { grid-template-columns: 1fr; }
   .feature-item { min-height: 0; padding: 1.25rem; }.feature-item + .feature-item { border-top: 1px solid #edf0f3; }.feature-item p { max-width: none; }
   .package-tabs { width: 100%; }.package-tab { flex: 1; padding-inline: .6rem; font-size: .78rem; }.package-tab-caption { display: none; }
+  .page-hero-inner { padding-block: 3rem; }
+  body:not(:has(.admin-route)) .page-hero-inner { padding-block: 3rem; }
+  body:not(:has(.admin-route)) .page-hero h1 { max-width: 22rem; font-size: clamp(2rem, 9vw, 2.65rem); line-height: 1.08; }
+  body:not(:has(.admin-route)) .page-hero-inner > p:last-child { max-width: 29rem; margin-top: 1rem; font-size: .95rem; line-height: 1.6; }
+  .package-browser-grid { display: flex; gap: .9rem; margin-inline: -.35rem; padding: .2rem .35rem 1rem; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .package-browser-grid::-webkit-scrollbar { display: none; }
+  .package-browser-grid > .package-card { flex: 0 0 min(86vw, 330px); scroll-snap-align: start; }
+  .package-browser-grid .package-image { aspect-ratio: 16 / 10; height: auto; }
+  .package-browser-grid .package-card h3 { font-size: 1.05rem; }
+  .package-browser-grid .package-card > div:last-child { padding: 1.1rem; }
   .package-detail-hero { min-height: 560px; }
   .package-detail-hero-content { padding-bottom: 4rem; }
   .package-detail-summary { margin-top: -1.5rem; }
