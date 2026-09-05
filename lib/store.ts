@@ -47,6 +47,7 @@ export type PublicSettings = {
   logoUrl?: string; brandName?: string; brandTagline?: string; topStripText?: string;
   headerCtaText?: string; headerCtaUrl?: string; whatsappLabel?: string;
   footerAbout?: string; footerCopyright?: string; footerTagline?: string; footerFacebook?: string; footerInstagram?: string; footerYoutube?: string; footerTwitter?: string;
+  footerPackagesJson?: string;
   googlePlaceId?: string; testimonialsJson?: string;
 };
 const defaultSettings: PublicSettings = { phone: contact.phone, phoneRaw: contact.phoneRaw, email: contact.email, address: contact.address, heroTitle: "Nepal Tours from Raxaul, Planned Around You.", heroSubtitle: "Mitra Travels provides Nepal tour packages, Raxaul to Kathmandu trips, Nepal taxi service and private car rental for families, groups and pilgrimage journeys.",
@@ -55,7 +56,7 @@ const defaultSettings: PublicSettings = { phone: contact.phone, phoneRaw: contac
   brandTagline: "Thoughtfully planned India & Nepal journeys from Raxaul", topStripText: "Thoughtfully planned India & Nepal journeys from Raxaul",
   headerCtaText: "Plan my trip", headerCtaUrl: "/contact#enquiry", whatsappLabel: "WhatsApp",
   footerAbout: "Mitra Travels is a trusted Raxaul, Bihar travel agency for India and Nepal tour packages, comfortable vehicles, car rental, hotel bookings, permits, Bhansar and personal travel assistance.",
-  footerCopyright: "© 2026 Mitra Travels. All rights reserved.", footerTagline: "Travel & Tourism Agency · Raxaul, Bihar", footerFacebook: "", footerInstagram: "", footerYoutube: "", footerTwitter: "", googlePlaceId: "", testimonialsJson: "[]"
+  footerCopyright: "© 2026 Mitra Travels. All rights reserved.", footerTagline: "Travel & Tourism Agency · Raxaul, Bihar", footerFacebook: "", footerInstagram: "", footerYoutube: "", footerTwitter: "", footerPackagesJson: "", googlePlaceId: "", testimonialsJson: "[]"
 };
 export async function getPublicSettings(): Promise<PublicSettings> {
   if (process.env.NODE_ENV !== "production") return { ...defaultSettings, ...getLocalSettings() };
