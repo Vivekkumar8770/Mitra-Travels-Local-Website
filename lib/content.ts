@@ -106,7 +106,7 @@ export const packages: TourPackage[] = [
     ],
     inclusions: ["Private transfers", "Selected hotel category", "Driver charges", "Trip coordination"],
     exclusions: ["Meals unless mentioned", "Personal expenses", "Special permits and activity charges"],
-    featured: true,
+    featured: false,
     active: true,
     imageUrl: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1400&q=85",
   },
