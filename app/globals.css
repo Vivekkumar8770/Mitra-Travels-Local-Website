@@ -155,6 +155,7 @@ button, input, textarea, select { font: inherit; }
 .section-heading-row > .section-cta, .journey-collections .section-heading-row > .text-link { flex: none; align-self: center; }
 .package-card { overflow: hidden; border: 1px solid #e7e0d7; border-radius: 16px; background: white; box-shadow: 0 10px 35px rgb(15 23 42 / 0.06); transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease; }
 .package-card:hover { transform: translateY(-4px); border-color: #d5c8bb; box-shadow: 0 22px 45px rgb(15 23 42 / 0.12); }
+.package-card:focus-visible{outline:3px solid rgb(249 115 22 / .35);outline-offset:4px}.package-card-action{transition:border-color 220ms ease}.package-card:hover .package-card-action{border-color:#f3c39f}.package-itinerary-cta{display:flex;align-items:center;justify-content:space-between;gap:.5rem;border:1px solid #e1e8ef;border-radius:10px;background:#f4f8fb;padding:.78rem .9rem;color:#0a2a50;font-size:.85rem;font-weight:850;transition:background-color 220ms ease,border-color 220ms ease,color 220ms ease,transform 220ms ease,box-shadow 220ms ease}.package-card:hover .package-itinerary-cta{border-color:#d71920;background:#d71920;color:#fff;box-shadow:0 8px 18px rgb(215 25 32 / .18);transform:translateX(2px)}
 .package-card { animation: content-rise 600ms cubic-bezier(.22,1,.36,1) both; }
 .package-card:nth-child(2) { animation-delay: 80ms; }
 .package-card:nth-child(3) { animation-delay: 160ms; }
