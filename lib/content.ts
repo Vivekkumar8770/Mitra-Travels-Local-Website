@@ -149,7 +149,7 @@ export const packages: TourPackage[] = [
     active: true,
     imageUrl: "https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?auto=format&fit=crop&w=1400&q=85",
   },
-];
+].filter((item) => !["kathmandu-pokhara-discovery", "muktinath-pilgrimage-journey", "nepal-grand-circuit"].includes(item.slug));
 
 export const blogPosts: BlogPost[] = [
   { slug: "best-time-to-visit-nepal", title: "Best Time to Visit Nepal: A Simple Seasonal Guide", excerpt: "Choose the right month for temple visits, Himalayan views and comfortable road travel.", content: "Nepal offers a different experience in every season. October to December is popular for clear mountain views, while February to April brings pleasant weather and colourful landscapes. Monsoon travel can be beautiful, but mountain routes may need extra flexibility. The best time for your trip depends on the route, activities and comfort level of your group.", category: "Nepal Travel", publishedAt: "2026-08-20", active: true, imageUrl: "https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=1400&q=85" },
