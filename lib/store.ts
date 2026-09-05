@@ -32,7 +32,15 @@ export async function getPublicPackages() { return (await getAllPackages()).filt
 export async function getPackageBySlug(slug: string) { return (await getAllPackages()).find((item) => item.slug === slug && item.active) ?? null; }
 
 export async function getAllBlogPosts(): Promise<BlogPost[]> {
-  try { const rows = await getDb().select().from(blogPostsTable).orderBy(desc(blogPostsTable.publishedAt)); const dynamic = rows.map(rowToBlog); const dynamicSlugs = new Set(dynamic.map((item) => item.slug)); return [...dynamic, ...blogPosts.filter((item) => !dynamicSlugs.has(item.slug))].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt)); } catch { return blogPosts; }
+  try {
+    const db = getDb();
+    const rows = await db.select().from(blogPostsTable).orderBy(desc(blogPostsTable.publishedAt));
+    const deletedRow = await db.select({ value: siteSettings.value }).from(siteSettings).where(eq(siteSettings.key, "deleted_blog_slugs")).limit(1);
+    const deletedSlugs = new Set(safeJson<string[]>(deletedRow[0]?.value || "[]", []));
+    const dynamic = rows.map(rowToBlog);
+    const dynamicSlugs = new Set(dynamic.map((item) => item.slug));
+    return [...dynamic, ...blogPosts.filter((item) => !dynamicSlugs.has(item.slug) && !deletedSlugs.has(item.slug))].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+  } catch { return blogPosts; }
 }
 export async function getPublicBlogPosts() { return (await getAllBlogPosts()).filter((post) => post.active); }
 export async function getBlogPostBySlug(slug: string) { return (await getAllBlogPosts()).find((post) => post.slug === slug && post.active) ?? null; }
