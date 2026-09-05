@@ -22,3 +22,7 @@ export const siteSettings = sqliteTable("site_settings", { key: text("key").prim
 export const mediaAssets = sqliteTable("media_assets", {
   id: integer("id").primaryKey({ autoIncrement: true }), storageKey: text("storage_key").notNull(), filename: text("filename").notNull(), contentType: text("content_type").notNull(), size: integer("size").notNull(), createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 }, (table) => [uniqueIndex("uq_media_assets_storage_key").on(table.storageKey), index("idx_media_assets_created").on(table.createdAt)]);
+
+export const journeyPurposeCards = sqliteTable("journey_purpose_cards", {
+  id: integer("id").primaryKey({ autoIncrement: true }), title: text("title").notNull(), description: text("description").notNull(), icon: text("icon").notNull().default("Route"), buttonText: text("button_text").notNull().default("Explore journey"), destinationUrl: text("destination_url").notNull(), linkType: text("link_type").notNull().default("internal"), openInNewTab: integer("open_in_new_tab", { mode: "boolean" }).notNull().default(false), displayOrder: integer("display_order").notNull().default(0), active: integer("active", { mode: "boolean" }).notNull().default(true), createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`), updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+}, (table) => [index("idx_journey_purpose_cards_active_order").on(table.active, table.displayOrder)]);

@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, Headphones, MapPinned, Phone, Route, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, BadgeCheck, Headphones, MapPinned, Route, ShieldCheck, Sparkles } from "lucide-react";
 import { PopularJourneysCarousel } from "@/components/popular-journeys-carousel";
-import { getPublicPackages, getPublicSettings } from "@/lib/store";
+import { getJourneyPurposeCards, getPublicPackages, getPublicSettings } from "@/lib/store";
 import { getGoogleReviews } from "@/lib/google-reviews";
 import type { Metadata } from "next";
 
@@ -12,14 +12,15 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-function JourneyCollectionCard({ Icon, title, copy, href, crossBorder }: { Icon: typeof ShieldCheck; title: string; copy: string; href: string; crossBorder?: boolean }) {
-  const card = <Link href={href} className="journey-collection-card"><span className="journey-collection-icon"><Icon /></span><span><h3>{title}</h3><p>{copy}</p><span className="journey-collection-link">Explore journey <ArrowRight className="size-4" /></span></span></Link>;
-  if (!crossBorder) return card;
-  return <div className="journey-cross-border-wrap"><a href="tel:+917545859616" className="journey-card-call"><Phone className="size-4" />Call our travel team</a>{card}</div>;
+function JourneyCollectionCard({ item }: { item: Awaited<ReturnType<typeof getJourneyPurposeCards>>[number] }) {
+  const iconMap = { ShieldCheck, MapPinned, Sparkles, Route, Headphones, BadgeCheck };
+  const Icon = iconMap[item.icon as keyof typeof iconMap] || Route;
+  const props = { href: item.destinationUrl, target: item.openInNewTab ? "_blank" : undefined, rel: item.openInNewTab ? "noreferrer" : undefined };
+  return <Link {...props} className="journey-collection-card"><span className="journey-collection-icon"><Icon /></span><span><h3>{item.title}</h3><p>{item.description}</p><span className="journey-collection-link">{item.buttonText} <ArrowRight className="size-4" /></span></span></Link>;
 }
 
 export default async function Home() {
-  const [items, settings] = await Promise.all([getPublicPackages(), getPublicSettings()]);
+  const [items, settings, purposeCards] = await Promise.all([getPublicPackages(), getPublicSettings(), getJourneyPurposeCards()]);
   const reviews = await getGoogleReviews(settings);
   let videoTestimonials: Array<{ name?: string; quote?: string; videoUrl?: string }> = [];
   try { videoTestimonials = JSON.parse(settings.testimonialsJson || "[]") as Array<{ name?: string; quote?: string; videoUrl?: string }>; } catch { videoTestimonials = []; }
@@ -64,7 +65,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="journey-collections section-space"><div className="container-shell"><div className="section-heading-row"><div><p className="section-kicker">Find your kind of journey</p><h2 className="section-title">Travel with a purpose</h2><p className="section-copy">Whether you are seeking darshan, Himalayan views or an easy family road trip, we shape the route around you.</p></div></div><div className="journey-collection-grid">{[[ShieldCheck,"Pilgrimage journeys","Muktinath, Pashupatinath, Janakpur and sacred routes planned with care.","/packages/muktinath-pilgrimage-journey"],[MapPinned,"Heritage & culture","Kathmandu temples, Lumbini, local streets and meaningful experiences.","/packages/kathmandu-pokhara-discovery"],[Sparkles,"Mountains & lakes","Pokhara, Himalayan landscapes and scenic Nepal road journeys.","/packages/kathmandu-pokhara-discovery"],[Route,"Cross-border road trips","Comfortable private travel from Raxaul with practical border support.","/packages"]].map(([Icon,title,copy,href]) => <JourneyCollectionCard key={String(title)} Icon={Icon as typeof ShieldCheck} title={String(title)} copy={String(copy)} href={String(href)} crossBorder={title === "Cross-border road trips"} />)}</div></div></section>
+      <section className="journey-collections section-space"><div className="container-shell"><div className="section-heading-row"><div><p className="section-kicker">Find your kind of journey</p><h2 className="section-title">Travel with a purpose</h2><p className="section-copy">Whether you are seeking darshan, Himalayan views or an easy family road trip, we shape the route around you.</p></div></div><div className="journey-collection-grid">{purposeCards.map((item) => <JourneyCollectionCard key={item.id ?? item.title} item={item} />)}</div></div></section>
 
       <section className="bg-[#edf5fb] section-space">
         <div className="container-shell grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">

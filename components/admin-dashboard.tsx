@@ -8,8 +8,9 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
-import type { BlogPost, TourPackage } from "@/lib/content";
+import type { BlogPost, JourneyPurposeCard, TourPackage } from "@/lib/content";
 import { AdminLeadListing } from "@/components/admin-lead-listing";
+import { TravelPurposeManager } from "@/components/travel-purpose-manager";
 
 type Faq = { id?: number; question: string; answer: string; sortOrder?: number; active?: boolean };
 type Enquiry = { id: number; name: string; phone: string; email: string; destination: string; packageName: string; pickupCity: string; travelDate: string; travellers: number; message: string; status: string; notes: string; createdAt: string };
@@ -42,7 +43,7 @@ async function optimiseImage(file: File) {
 
 const sections = [
   ["overview","Dashboard",LayoutDashboard], ["crm","Lead CRM",Inbox], ["packages","Packages",PackagePlus], ["blogs","Blogs",BookOpen],
-  ["media","Media Library",FileImage], ["enquiries","Enquiries",Inbox], ["homepage","Homepage",LayoutTemplate],
+  ["media","Media Library",FileImage], ["enquiries","Enquiries",Inbox], ["purpose","Travel Purpose Cards",Route], ["homepage","Homepage",LayoutTemplate],
   ["design","Design & Branding",Palette], ["header","Header & Navigation",SlidersHorizontal], ["testimonials","Testimonials & Videos",MessageCircle],
   ["footer","Footer",Footprints], ["seo","SEO",Globe2], ["faqs","FAQs",CircleHelp], ["settings","Settings",Settings],
 ] as const;
@@ -50,7 +51,7 @@ type Section = typeof sections[number][0];
 const navigationGroups = [
   { label: "Workspace", items: sections.filter(([id]) => id === "overview" || id === "crm" || id === "enquiries") },
   { label: "Content", items: sections.filter(([id]) => ["packages", "blogs", "media", "faqs"].includes(id)) },
-  { label: "Website", items: sections.filter(([id]) => ["homepage", "design", "header", "footer", "seo", "testimonials"].includes(id)) },
+  { label: "Website", items: sections.filter(([id]) => ["purpose", "homepage", "design", "header", "footer", "seo", "testimonials"].includes(id)) },
   { label: "Configuration", items: sections.filter(([id]) => id === "settings") },
 ] as const;
 
@@ -62,6 +63,7 @@ export function AdminDashboard() {
   const [faqs, setFaqs] = useState<Faq[]>([]);
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [media, setMedia] = useState<Media[]>([]);
+  const [purposeCards, setPurposeCards] = useState<Array<JourneyPurposeCard & { id: number }>>([]);
   const [settings, setSettings] = useState<Record<string,string>>({});
   const [loading, setLoading] = useState(true);
   const [packageDraft, setPackageDraft] = useState<TourPackage | null>(null);
@@ -75,12 +77,12 @@ export function AdminDashboard() {
   async function loadAll() {
     setLoading(true);
     try {
-      const [p,b,f,e,m,s] = await Promise.all([
+      const [p,b,f,e,m,s,purpose] = await Promise.all([
         api<{items:TourPackage[]}>("/api/admin/packages"), api<{items:BlogPost[]}>("/api/admin/blogs"),
         api<{items:Faq[]}>("/api/admin/faqs"), api<{items:Enquiry[]}>("/api/enquiries"),
-        api<{items:Media[]}>("/api/admin/media"), api<{item:Record<string,string>}>("/api/admin/settings")
+        api<{items:Media[]}>("/api/admin/media"), api<{item:Record<string,string>}>("/api/admin/settings"), api<{items:Array<JourneyPurposeCard & {id:number}>}>("/api/admin/journey-purpose")
       ]);
-      setPackages(p.items); setBlogs(b.items); setFaqs(f.items); setEnquiries(e.items); setMedia(m.items); setSettings(s.item);
+      setPackages(p.items); setBlogs(b.items); setFaqs(f.items); setEnquiries(e.items); setMedia(m.items); setSettings(s.item); setPurposeCards(purpose.items);
     } catch (e) { toast.error(e instanceof Error ? e.message : "Unable to load admin data."); }
     finally { setLoading(false); }
   }
@@ -114,6 +116,7 @@ export function AdminDashboard() {
         {section==="blogs" && <ManagerShell title="Travel content studio" copy="Create richer destination guides, travel tips and SEO-friendly articles." action={<button onClick={()=>setBlogDraft(emptyBlog)} className="admin-btn primary"><Plus/>New blog</button>}>{blogDraft&&<BlogForm item={blogDraft} onCancel={()=>setBlogDraft(null)} onSave={saveBlog} media={media}/>}<BlogList items={blogs} onEdit={setBlogDraft} onDelete={async(item)=>{if(!window.confirm(`Delete “${item.title}” permanently? This cannot be undone.`))return;try{await api(`/api/admin/blogs?slug=${encodeURIComponent(item.slug)}`,{method:"DELETE"});toast.success("Blog permanently deleted");await loadAll()}catch(error){toast.error(error instanceof Error?error.message:"Unable to delete blog.")}}}/></ManagerShell>}
         {section==="media" && <ManagerShell title="Media library" copy="Central image library for packages, homepage and blogs."><MediaManager items={media} onUploaded={loadAll}/></ManagerShell>}
         {section==="enquiries" && <ManagerShell title="Customer enquiries" copy="Track every lead from first enquiry to confirmed trip."><AdminLeadListing items={enquiries} onUpdated={loadAll}/></ManagerShell>}
+        {section==="purpose" && <TravelPurposeManager initialItems={purposeCards}/>} 
         {section==="homepage" && <HeroManager settings={settings} media={media} onSave={saveSettings}/>}
         {section==="design" && <ContentSettings title="Design & Branding" groups={[["Brand identity",{brandName:settings.brandName||"Mitra Travels",brandTagline:settings.brandTagline||"Private India & Nepal tours from Raxaul",primaryColor:settings.primaryColor||"#f97316",secondaryColor:settings.secondaryColor||"#071a33",headingFont:settings.headingFont||"Inter",bodyFont:settings.bodyFont||"Inter"}]]} onSave={saveSettings}/>}
         {section==="header" && <ContentSettings title="Header & Navigation" groups={[["Header settings",{logoUrl:settings.logoUrl||"/mitra-travels-logo.png",headerCtaText:settings.headerCtaText||"Plan my trip",headerCtaUrl:settings.headerCtaUrl||"/contact#enquiry",whatsappLabel:settings.whatsappLabel||"WhatsApp",headerTagline:settings.headerTagline||"Thoughtfully planned India & Nepal journeys from Raxaul",topStripText:settings.topStripText||"Thoughtfully planned India & Nepal journeys from Raxaul"}],["Header social links",{footerFacebook:settings.footerFacebook||"",footerInstagram:settings.footerInstagram||"",footerYoutube:settings.footerYoutube||"",footerTwitter:settings.footerTwitter||""}]]} onSave={saveSettings}/>}

@@ -1,12 +1,13 @@
 import { asc, desc, eq } from "drizzle-orm";
 import { getDb } from "@/db";
-import { blogPostsTable, faqItems, siteSettings, tourPackages } from "@/db/schema";
-import { blogPosts, contact, faqs, packages, type BlogPost, type TourPackage } from "@/lib/content";
+import { blogPostsTable, faqItems, journeyPurposeCards, siteSettings, tourPackages } from "@/db/schema";
+import { blogPosts, contact, defaultJourneyPurposeCards, faqs, packages, type BlogPost, type JourneyPurposeCard, type TourPackage } from "@/lib/content";
 import { getLocalSettings } from "@/lib/local-settings";
 import { getDeletedLocalPackageSlugs, listLocalPackages } from "@/lib/local-packages";
 
 type PackageRow = typeof tourPackages.$inferSelect;
 type BlogRow = typeof blogPostsTable.$inferSelect;
+type JourneyPurposeRow = typeof journeyPurposeCards.$inferSelect;
 function safeJson<T>(value: string, fallback: T): T { try { return JSON.parse(value) as T; } catch { return fallback; } }
 export function rowToPackage(row: PackageRow): TourPackage { return { id: row.id, slug: row.slug, country: row.country === "India" ? "India" : "Nepal", title: row.title, duration: row.duration, summary: row.summary, route: row.route, highlights: safeJson(row.highlightsJson, []), itinerary: safeJson(row.itineraryJson, []), inclusions: safeJson(row.inclusionsJson, []), exclusions: safeJson(row.exclusionsJson, []), featured: row.featured, active: row.active, imageUrl: row.imageUrl }; }
 export function rowToBlog(row: BlogRow): BlogPost { return { id: row.id, slug: row.slug, title: row.title, excerpt: row.excerpt, content: row.content, category: row.category, publishedAt: row.publishedAt, imageUrl: row.imageUrl, active: row.active }; }
@@ -48,6 +49,8 @@ export async function getBlogPostBySlug(slug: string) { return (await getAllBlog
 export async function getPublicFaqs() {
   try { const rows = await getDb().select().from(faqItems).where(eq(faqItems.active, true)).orderBy(asc(faqItems.sortOrder), asc(faqItems.id)); return rows.length ? rows.map((row) => ({ id: row.id, question: row.question, answer: row.answer, active: row.active, sortOrder: row.sortOrder })) : faqs; } catch { return faqs; }
 }
+export function rowToJourneyPurposeCard(row: JourneyPurposeRow): JourneyPurposeCard { return { id: row.id, title: row.title, description: row.description, icon: row.icon, buttonText: row.buttonText, destinationUrl: row.destinationUrl, linkType: row.linkType === "external" ? "external" : "internal", openInNewTab: row.openInNewTab, displayOrder: row.displayOrder, active: row.active }; }
+export async function getJourneyPurposeCards(): Promise<JourneyPurposeCard[]> { try { const rows = await getDb().select().from(journeyPurposeCards).where(eq(journeyPurposeCards.active, true)).orderBy(asc(journeyPurposeCards.displayOrder), asc(journeyPurposeCards.id)); return rows.length ? rows.map(rowToJourneyPurposeCard) : defaultJourneyPurposeCards; } catch { return defaultJourneyPurposeCards; } }
 
 export type PublicSettings = {
   phone: string; phoneRaw: string; email: string; address: string; heroTitle: string; heroSubtitle: string;
