@@ -1,18 +1,27 @@
 import { z } from "zod";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { env } from "cloudflare:workers";
 import { getDb } from "@/db";
 import { mediaAssets, siteSettings, tourPackages } from "@/db/schema";
 import { requireAdminApi } from "@/lib/admin-auth";
-import { getAllPackages } from "@/lib/store";
-import { deleteLocalPackage, saveLocalPackage } from "@/lib/local-packages";
+import { rowToPackage } from "@/lib/store";
+import { deleteLocalPackage, listLocalPackages, saveLocalPackage } from "@/lib/local-packages";
 
 const daySchema = z.object({ day: z.string(), title: z.string(), details: z.string() });
 const schema = z.object({ slug: z.string().trim().min(2).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), country: z.enum(["India", "Nepal"]), title: z.string().trim().min(2), duration: z.string().trim().min(2), summary: z.string().trim().min(2), route: z.string().trim().min(2), highlights: z.array(z.string()), itinerary: z.array(daySchema), inclusions: z.array(z.string()), exclusions: z.array(z.string()), imageUrl: z.string().trim().min(1), featured: z.boolean(), active: z.boolean() });
 const localDevelopment = process.env.NODE_ENV !== "production";
 type Bucket = { delete(key: string): Promise<void> };
 
-export async function GET() { const admin = await requireAdminApi(); if (!admin) return Response.json({ error: "Unauthorized" }, { status: 401 }); return Response.json({ items: await getAllPackages() }); }
+export async function GET() {
+  const admin = await requireAdminApi(); if (!admin) return Response.json({ error: "Unauthorized" }, { status: 401 });
+  if (localDevelopment) return Response.json({ items: listLocalPackages() });
+  try {
+    const rows = await getDb().select().from(tourPackages).orderBy(desc(tourPackages.updatedAt));
+    return Response.json({ items: rows.map(rowToPackage) });
+  } catch {
+    return Response.json({ items: [] });
+  }
+}
 export async function POST(request: Request) {
   const admin = await requireAdminApi(); if (!admin) return Response.json({ error: "Unauthorized" }, { status: 401 });
   const parsed = schema.safeParse(await request.json()); if (!parsed.success) return Response.json({ error: "Please complete all required package fields." }, { status: 400 });
