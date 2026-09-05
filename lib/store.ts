@@ -52,7 +52,7 @@ export async function getPublicFaqs() {
 export type PublicSettings = {
   phone: string; phoneRaw: string; email: string; address: string; heroTitle: string; heroSubtitle: string;
   heroImage?: string; heroImages?: string; heroEyebrow?: string; heroPrimaryText?: string; heroSecondaryText?: string;
-  logoUrl?: string; brandName?: string; brandTagline?: string; topStripText?: string;
+  logoUrl?: string; brandName?: string; brandTagline?: string; headerTagline?: string; topStripText?: string;
   headerCtaText?: string; headerCtaUrl?: string; whatsappLabel?: string;
   footerAbout?: string; footerCopyright?: string; footerTagline?: string; footerFacebook?: string; footerInstagram?: string; footerYoutube?: string; footerTwitter?: string;
   footerPackagesJson?: string;
@@ -61,7 +61,7 @@ export type PublicSettings = {
 const defaultSettings: PublicSettings = { phone: contact.phone, phoneRaw: contact.phoneRaw, email: contact.email, address: contact.address, heroTitle: "Nepal Tours from Raxaul, Planned Around You.", heroSubtitle: "Mitra Travels provides Nepal tour packages, Raxaul to Kathmandu trips, Nepal taxi service and private car rental for families, groups and pilgrimage journeys.",
   heroImage: "/mitra-travels-hero.png", heroEyebrow: "Private journeys, personally planned", heroPrimaryText: "Explore packages",
   heroSecondaryText: "Get a custom plan", logoUrl: "/mitra-travels-logo.png", brandName: "Mitra Travels",
-  brandTagline: "Thoughtfully planned India & Nepal journeys from Raxaul", topStripText: "Thoughtfully planned India & Nepal journeys from Raxaul",
+  brandTagline: "Thoughtfully planned India & Nepal journeys from Raxaul", headerTagline: "Thoughtfully planned India & Nepal journeys from Raxaul", topStripText: "Thoughtfully planned India & Nepal journeys from Raxaul",
   headerCtaText: "Plan my trip", headerCtaUrl: "/contact#enquiry", whatsappLabel: "WhatsApp",
   footerAbout: "Mitra Travels is a trusted Raxaul, Bihar travel agency for India and Nepal tour packages, comfortable vehicles, car rental, hotel bookings, permits, Bhansar and personal travel assistance.",
   footerCopyright: "© 2026 Mitra Travels. All rights reserved.", footerTagline: "Travel & Tourism Agency · Raxaul, Bihar", footerFacebook: "", footerInstagram: "", footerYoutube: "", footerTwitter: "", footerPackagesJson: "", googlePlaceId: "", testimonialsJson: "[]"

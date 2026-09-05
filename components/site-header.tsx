@@ -15,7 +15,7 @@ function Logo({ settings }: { settings: PublicSettings }) {
 }
 
 export function SiteHeader({ settings }: { settings: PublicSettings }) {
-  const topStripText = settings.topStripText === "Private India & Nepal tours from Raxaul" ? professionalTopStripText : settings.topStripText || settings.brandTagline || professionalTopStripText;
+  const topStripText = settings.topStripText === "Private India & Nepal tours from Raxaul" ? professionalTopStripText : settings.topStripText || settings.headerTagline || professionalTopStripText;
   const pathname = usePathname();
   const isActive = (href: string) => href === "/" ? pathname === "/" : pathname.startsWith(href);
   const socialLinks = [[FaFacebookF, "Facebook", settings.footerFacebook], [FaInstagram, "Instagram", settings.footerInstagram], [FaYoutube, "YouTube", settings.footerYoutube], [FaXTwitter, "X / Twitter", settings.footerTwitter]] as const;
