@@ -2,12 +2,12 @@ import Link from "next/link";
 import { LockKeyhole } from "lucide-react";
 import { chatGPTSignInPath, getChatGPTUser } from "@/app/chatgpt-auth";
 import { AdminDashboard } from "@/components/admin-dashboard";
-import { getAllowedAdminEmails } from "@/lib/admin-auth";
+import { getAllowedAdminEmails, isLocalAdminMode } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
-  const localMode = process.env.NODE_ENV !== "production";
+  const localMode = isLocalAdminMode();
   const user = await getChatGPTUser();
   const allowed = getAllowedAdminEmails();
   const authorised = localMode || Boolean(user && allowed.length && allowed.includes(user.email.trim().toLowerCase()));
