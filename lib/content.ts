@@ -24,6 +24,7 @@ export type BlogPost = {
   category: string;
   publishedAt: string;
   active: boolean;
+  imageUrl?: string;
 };
 
 export const packages: TourPackage[] = [
@@ -46,7 +47,7 @@ export const packages: TourPackage[] = [
     exclusions: ["Personal expenses", "Meals unless mentioned in the quote", "Entry tickets and activity charges"],
     featured: true,
     active: true,
-    imageUrl: "/mitra-travels-hero.png",
+    imageUrl: "https://images.unsplash.com/photo-1558799401-1dc8f3f3a7f4?auto=format&fit=crop&w=1400&q=85",
   },
   {
     slug: "muktinath-pilgrimage-journey",
@@ -68,7 +69,7 @@ export const packages: TourPackage[] = [
     exclusions: ["Muktinath personal permits unless quoted", "Meals", "Personal expenses and entry fees"],
     featured: true,
     active: true,
-    imageUrl: "/mitra-travels-hero.png",
+    imageUrl: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1400&q=85",
   },
   {
     slug: "nepal-grand-circuit",
@@ -88,7 +89,7 @@ export const packages: TourPackage[] = [
     exclusions: ["Meals and personal expenses", "Entry fees", "Activities not listed in the final quote"],
     featured: false,
     active: true,
-    imageUrl: "/mitra-travels-hero.png",
+    imageUrl: "https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=1400&q=85",
   },
   {
     slug: "sikkim-darjeeling-escape",
@@ -107,7 +108,7 @@ export const packages: TourPackage[] = [
     exclusions: ["Meals unless mentioned", "Personal expenses", "Special permits and activity charges"],
     featured: true,
     active: true,
-    imageUrl: "/mitra-travels-hero.png",
+    imageUrl: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1400&q=85",
   },
   {
     slug: "varanasi-spiritual-trail",
@@ -127,7 +128,7 @@ export const packages: TourPackage[] = [
     exclusions: ["Boat ride and entry fees", "Meals", "Personal expenses"],
     featured: false,
     active: true,
-    imageUrl: "/mitra-travels-hero.png",
+    imageUrl: "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1400&q=85",
   },
   {
     slug: "ayodhya-prayagraj-pilgrimage",
@@ -146,14 +147,14 @@ export const packages: TourPackage[] = [
     exclusions: ["Meals", "Entry or boating charges", "Personal expenses"],
     featured: false,
     active: true,
-    imageUrl: "/mitra-travels-hero.png",
+    imageUrl: "https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?auto=format&fit=crop&w=1400&q=85",
   },
 ];
 
 export const blogPosts: BlogPost[] = [
-  { slug: "best-time-to-visit-nepal", title: "Best Time to Visit Nepal: A Simple Seasonal Guide", excerpt: "Choose the right month for temple visits, Himalayan views and comfortable road travel.", content: "Nepal offers a different experience in every season. October to December is popular for clear mountain views, while February to April brings pleasant weather and colourful landscapes. Monsoon travel can be beautiful, but mountain routes may need extra flexibility. The best time for your trip depends on the route, activities and comfort level of your group.", category: "Nepal Travel", publishedAt: "2026-08-20", active: true },
-  { slug: "muktinath-road-trip-guide", title: "What to Know Before a Muktinath Road Trip", excerpt: "Practical planning tips for permits, altitude, overnight halts and mountain-road conditions.", content: "A Muktinath road journey rewards careful planning. Travellers should allow time for changing road conditions, carry warm layers and discuss permit requirements before departure. An overnight halt around Jomsom helps create a safer, more comfortable itinerary. Always keep medicines, identity documents and some flexible time in your schedule.", category: "Travel Guide", publishedAt: "2026-08-12", active: true },
-  { slug: "india-nepal-border-checklist", title: "India–Nepal Border Travel Checklist", excerpt: "A quick checklist to help families prepare for a smooth cross-border holiday from Raxaul.", content: "Keep valid identification for every traveller, confirm hotel details and share your expected border arrival time with the tour coordinator. Carry essential medicines, light snacks and a small amount of local currency. Vehicle paperwork and route permits should be confirmed as part of your final travel quote.", category: "Travel Tips", publishedAt: "2026-08-02", active: true },
+  { slug: "best-time-to-visit-nepal", title: "Best Time to Visit Nepal: A Simple Seasonal Guide", excerpt: "Choose the right month for temple visits, Himalayan views and comfortable road travel.", content: "Nepal offers a different experience in every season. October to December is popular for clear mountain views, while February to April brings pleasant weather and colourful landscapes. Monsoon travel can be beautiful, but mountain routes may need extra flexibility. The best time for your trip depends on the route, activities and comfort level of your group.", category: "Nepal Travel", publishedAt: "2026-08-20", active: true, imageUrl: "https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=1400&q=85" },
+  { slug: "muktinath-road-trip-guide", title: "What to Know Before a Muktinath Road Trip", excerpt: "Practical planning tips for permits, altitude, overnight halts and mountain-road conditions.", content: "A Muktinath road journey rewards careful planning. Travellers should allow time for changing road conditions, carry warm layers and discuss permit requirements before departure. An overnight halt around Jomsom helps create a safer, more comfortable itinerary. Always keep medicines, identity documents and some flexible time in your schedule.", category: "Travel Guide", publishedAt: "2026-08-12", active: true, imageUrl: "https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=1400&q=85" },
+  { slug: "india-nepal-border-checklist", title: "India–Nepal Border Travel Checklist", excerpt: "A quick checklist to help families prepare for a smooth cross-border holiday from Raxaul.", content: "Keep valid identification for every traveller, confirm hotel details and share your expected border arrival time with the tour coordinator. Carry essential medicines, light snacks and a small amount of local currency. Vehicle paperwork and route permits should be confirmed as part of your final travel quote.", category: "Travel Tips", publishedAt: "2026-08-02", active: true, imageUrl: "https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?auto=format&fit=crop&w=1400&q=85" },
 ];
 
 export const faqs = [

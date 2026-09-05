@@ -3,6 +3,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteBreadcrumbBar } from "@/components/site-breadcrumb-bar";
+import { FloatingActions } from "@/components/floating-actions";
 import { getPublicSettings } from "@/lib/store";
 
 export const metadata: Metadata = {
@@ -23,7 +24,7 @@ export default async function RootLayout({
   const settings = await getPublicSettings();
   return (
     <html lang="en">
-      <body className="antialiased"><SiteHeader settings={settings} /><SiteBreadcrumbBar />{children}<SiteFooter settings={settings} /></body>
+      <body className="antialiased"><SiteHeader settings={settings} /><SiteBreadcrumbBar />{children}<SiteFooter settings={settings} /><FloatingActions settings={settings} /></body>
     </html>
   );
 }

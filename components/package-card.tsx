@@ -5,7 +5,7 @@ import type { TourPackage } from "@/lib/content";
 export function PackageCard({ item }: { item: TourPackage }) {
   return (
     <article className="package-card group">
-      <div className="package-image"><img src={item.imageUrl} alt="" /><span className="country-chip">{item.country}</span></div>
+      <div className="package-image"><img src={item.imageUrl} alt={`${item.title} travel experience in ${item.country}`} loading="lazy" /><span className="country-chip">{item.country}</span></div>
       <div className="p-6">
         <div className="flex items-center gap-4 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500"><span className="inline-flex items-center gap-1.5"><Clock3 className="size-3.5 text-orange-500" />{item.duration}</span></div>
         <h3 className="mt-3 text-xl font-bold text-slate-950">{item.title}</h3>

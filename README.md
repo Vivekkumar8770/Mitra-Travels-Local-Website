@@ -25,7 +25,6 @@ Scripts that need writable project-scoped home, npm, XDG, and temporary paths us
 - `vite.config.ts` simulates declared bindings for local development
 - `db/index.ts` reads the D1 binding from the Cloudflare Worker environment
 - `db/schema.ts` starts intentionally empty
-- `examples/d1/` contains an optional D1 example surface
 - `drizzle.config.ts` supports local migration generation when needed
 
 ## Workspace Auth Headers
@@ -75,6 +74,17 @@ SIWC establishes identity only; it does not prove workspace membership. Use the 
 Use SIWC for account pages, user-specific dashboards, saved records, and write actions tied to the current ChatGPT user. Leave public content anonymous.
 
 ## Diagnostic Commands
+
+### Google Reviews Setup
+
+The homepage can display recent Google Business/Maps reviews when these server-side variables are configured in a local `.env` file or hosting environment:
+
+```text
+GOOGLE_PLACES_API_KEY=your_server_side_key
+GOOGLE_PLACE_ID=your_google_business_place_id
+```
+
+Enable the Places API in Google Cloud, restrict the key to the Places API, and never commit the real key. The public site safely hides the reviews section when the variables are missing or the API is unavailable.
 
 - `npm run install:ci`: perform the one bounded lockfile install
 - `npm run dev`: start the Vite/Vinext development server

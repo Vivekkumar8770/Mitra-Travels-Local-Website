@@ -2,6 +2,8 @@ import { asc, desc, eq } from "drizzle-orm";
 import { getDb } from "@/db";
 import { blogPostsTable, faqItems, siteSettings, tourPackages } from "@/db/schema";
 import { blogPosts, contact, faqs, packages, type BlogPost, type TourPackage } from "@/lib/content";
+import { getLocalSettings } from "@/lib/local-settings";
+import { listLocalPackages } from "@/lib/local-packages";
 
 type PackageRow = typeof tourPackages.$inferSelect;
 type BlogRow = typeof blogPostsTable.$inferSelect;
@@ -10,7 +12,8 @@ export function rowToPackage(row: PackageRow): TourPackage { return { id: row.id
 export function rowToBlog(row: BlogRow): BlogPost { return { id: row.id, slug: row.slug, title: row.title, excerpt: row.excerpt, content: row.content, category: row.category, publishedAt: row.publishedAt, active: row.active }; }
 
 export async function getAllPackages(): Promise<TourPackage[]> {
-  try { const rows = await getDb().select().from(tourPackages).orderBy(desc(tourPackages.updatedAt)); const dynamic = rows.map(rowToPackage); const dynamicSlugs = new Set(dynamic.map((item) => item.slug)); return [...dynamic, ...packages.filter((item) => !dynamicSlugs.has(item.slug))]; } catch { return packages; }
+  const local = process.env.NODE_ENV !== "production" ? listLocalPackages() : [];
+  try { const rows = await getDb().select().from(tourPackages).orderBy(desc(tourPackages.updatedAt)); const dynamic = [...local, ...rows.map(rowToPackage)]; const dynamicSlugs = new Set(dynamic.map((item) => item.slug)); return [...dynamic, ...packages.filter((item) => !dynamicSlugs.has(item.slug))]; } catch { const localSlugs = new Set(local.map((item) => item.slug)); return [...local, ...packages.filter((item) => !localSlugs.has(item.slug))]; }
 }
 export async function getPublicPackages() { return (await getAllPackages()).filter((item) => item.active); }
 export async function getPackageBySlug(slug: string) { return (await getAllPackages()).find((item) => item.slug === slug && item.active) ?? null; }
@@ -30,7 +33,8 @@ export type PublicSettings = {
   heroImage?: string; heroImages?: string; heroEyebrow?: string; heroPrimaryText?: string; heroSecondaryText?: string;
   logoUrl?: string; brandName?: string; brandTagline?: string; topStripText?: string;
   headerCtaText?: string; headerCtaUrl?: string; whatsappLabel?: string;
-  footerAbout?: string; footerCopyright?: string; footerTagline?: string;
+  footerAbout?: string; footerCopyright?: string; footerTagline?: string; footerFacebook?: string; footerInstagram?: string; footerYoutube?: string; footerTwitter?: string;
+  googlePlaceId?: string; testimonialsJson?: string;
 };
 const defaultSettings: PublicSettings = { phone: contact.phone, phoneRaw: contact.phoneRaw, email: contact.email, address: contact.address, heroTitle: "Nepal Tours from Raxaul, Planned Around You.", heroSubtitle: "Mitra Travels provides Nepal tour packages, Raxaul to Kathmandu trips, Nepal taxi service and private car rental for families, groups and pilgrimage journeys.",
   heroImage: "/mitra-travels-hero.png", heroEyebrow: "Private journeys, personally planned", heroPrimaryText: "Explore packages",
@@ -38,9 +42,10 @@ const defaultSettings: PublicSettings = { phone: contact.phone, phoneRaw: contac
   brandTagline: "Thoughtfully planned India & Nepal journeys from Raxaul", topStripText: "Thoughtfully planned India & Nepal journeys from Raxaul",
   headerCtaText: "Plan my trip", headerCtaUrl: "/contact#enquiry", whatsappLabel: "WhatsApp",
   footerAbout: "Mitra Travels is a trusted Raxaul, Bihar travel agency for India and Nepal tour packages, comfortable vehicles, car rental, hotel bookings, permits, Bhansar and personal travel assistance.",
-  footerCopyright: "© 2026 Mitra Travels. All rights reserved.", footerTagline: "Travel & Tourism Agency · Raxaul, Bihar"
+  footerCopyright: "© 2026 Mitra Travels. All rights reserved.", footerTagline: "Travel & Tourism Agency · Raxaul, Bihar", footerFacebook: "", footerInstagram: "", footerYoutube: "", footerTwitter: "", googlePlaceId: "", testimonialsJson: "[]"
 };
 export async function getPublicSettings(): Promise<PublicSettings> {
+  if (process.env.NODE_ENV !== "production") return { ...defaultSettings, ...getLocalSettings() };
   try { const rows = await getDb().select().from(siteSettings); return { ...defaultSettings, ...Object.fromEntries(rows.map((row) => [row.key, row.value])) }; }
   catch { return defaultSettings; }
 }

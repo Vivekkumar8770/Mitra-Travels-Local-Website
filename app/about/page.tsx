@@ -19,6 +19,8 @@ export default function AboutPage() {
   return (
     <main>
       <section className="page-hero">
+        <img className="page-hero-image" src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=2200&q=85" alt="Mountain landscape for a Nepal journey" />
+        <div className="page-hero-overlay" />
         <div className="container-shell page-hero-inner">
           <p className="eyebrow text-orange-300">About Mitra Travels</p>
           <h1 className="mt-4 max-w-4xl text-4xl font-extrabold tracking-tight sm:text-6xl">Your trusted Raxaul travel agency for India and Nepal</h1>
@@ -28,7 +30,7 @@ export default function AboutPage() {
 
       <section className="section-space">
         <div className="container-shell grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="relative min-h-[500px] overflow-hidden rounded-[2rem]"><img src="/mitra-travels-hero.png" alt="Scenic Nepal road journey planned from Raxaul" className="absolute inset-0 h-full w-full object-cover object-right" /><div className="absolute inset-0 bg-gradient-to-t from-[#06162b]/85 to-transparent" /><p className="absolute bottom-8 left-8 max-w-sm text-2xl font-extrabold text-white">One dependable partner from Raxaul to your destination.</p></div>
+          <div className="relative min-h-[500px] overflow-hidden rounded-[2rem]"><img src="https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?auto=format&fit=crop&w=1600&q=85" alt="Scenic Nepal road journey planned from Raxaul" className="absolute inset-0 h-full w-full object-cover object-center" loading="lazy" /><div className="absolute inset-0 bg-gradient-to-t from-[#06162b]/85 to-transparent" /><p className="absolute bottom-8 left-8 max-w-sm text-2xl font-extrabold text-white">One dependable partner from Raxaul to your destination.</p></div>
           <div>
             <p className="section-kicker">Travel made straightforward</p>
             <h2 className="section-title">Everything you need for a smooth journey</h2>
