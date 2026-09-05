@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Archive, ArrowRight, BookDown, BookOpen, CircleHelp, FileImage, Inbox, LayoutDashboard, MessageCircle, Route,
   ChevronDown, Menu, PackagePlus, Pencil, Plus, RefreshCw, Save, Search, Settings, SlidersHorizontal,
-  Upload, Globe2, Palette, LayoutTemplate, Footprints, X
+  Upload, Globe2, Palette, LayoutTemplate, Footprints, X, LogOut
 } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
@@ -105,7 +105,7 @@ export function AdminDashboard() {
     </aside>
     {sidebar && <button className="admin-backdrop" aria-label="Close menu" onClick={()=>setSidebar(false)}/>}
     <main className="admin-main">
-      <header className="admin-topbar"><button className="admin-menu" onClick={()=>setSidebar(true)}><Menu/></button><div><span className="admin-kicker">Mitra Travels / Administration</span><h1>{sections.find(x=>x[0]===section)?.[1]}</h1><p className="admin-page-subtitle">{section === "enquiries" ? "Track and manage customer enquiries and travel leads." : "Manage your website content and travel operations."}</p></div><div className="admin-actions"><a href="/" target="_blank" className="admin-view-site">View website ↗</a><button className="admin-refresh" onClick={()=>void loadAll()}><RefreshCw className={loading?"spin":""}/><span>Refresh</span></button></div></header>
+      <header className="admin-topbar"><button className="admin-menu" onClick={()=>setSidebar(true)}><Menu/></button><div><span className="admin-kicker">Mitra Travels / Administration</span><h1>{sections.find(x=>x[0]===section)?.[1]}</h1><p className="admin-page-subtitle">{section === "enquiries" ? "Track and manage customer enquiries and travel leads." : "Manage your website content and travel operations."}</p></div><div className="admin-actions"><a href="/" target="_blank" className="admin-view-site">View website ↗</a><button className="admin-refresh" onClick={()=>void loadAll()}><RefreshCw className={loading?"spin":""}/><span>Refresh</span></button><form action="/api/admin/logout" method="post"><button className="admin-refresh" type="submit"><LogOut/><span>Logout</span></button></form></div></header>
       <div className="admin-content">
         {section==="overview" && <DashboardOverview stats={stats} packages={packages} enquiries={enquiries} blogs={blogs} onNavigate={setSection}/>}
         {section==="crm" && <>{leadDraft&&<AdminLeadForm onCancel={()=>setLeadDraft(false)} onSaved={async()=>{setLeadDraft(false);await loadAll()}}/>}<LeadCrmOverview enquiries={enquiries} onNavigate={setSection} onAdd={()=>setLeadDraft(true)} onExport={()=>exportEnquiries(enquiries)}/></>} 

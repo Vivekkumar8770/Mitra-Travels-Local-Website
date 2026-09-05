@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { getChatGPTUser } from "@/app/chatgpt-auth";
 
-const ADMIN_SESSION_COOKIE = "mitra_admin_session";
+export const ADMIN_SESSION_COOKIE = "mitra_admin_session";
 
 export async function requireAdminApi() {
   if (isLocalAdminMode()) {
@@ -55,6 +55,11 @@ export async function hasValidAdminSession() {
   const session = (await cookies()).get(ADMIN_SESSION_COOKIE)?.value;
   if (!password || !secret || !session) return false;
   return session === (await signValue(password, secret));
+}
+
+export async function clearAdminSession() {
+  const cookieStore = await cookies();
+  cookieStore.delete(ADMIN_SESSION_COOKIE);
 }
 
 async function signValue(value: string, secret: string) {
