@@ -50,7 +50,7 @@ export async function getPublicFaqs() {
   try { const rows = await getDb().select().from(faqItems).where(eq(faqItems.active, true)).orderBy(asc(faqItems.sortOrder), asc(faqItems.id)); return rows.length ? rows.map((row) => ({ id: row.id, question: row.question, answer: row.answer, active: row.active, sortOrder: row.sortOrder })) : faqs; } catch { return faqs; }
 }
 export function rowToJourneyPurposeCard(row: JourneyPurposeRow): JourneyPurposeCard { return { id: row.id, title: row.title, description: row.description, icon: row.icon, buttonText: row.buttonText, destinationUrl: row.destinationUrl, linkType: row.linkType === "external" ? "external" : "internal", openInNewTab: row.openInNewTab, displayOrder: row.displayOrder, active: row.active }; }
-export async function getJourneyPurposeCards(): Promise<JourneyPurposeCard[]> { try { const rows = await getDb().select().from(journeyPurposeCards).where(eq(journeyPurposeCards.active, true)).orderBy(asc(journeyPurposeCards.displayOrder), asc(journeyPurposeCards.id)); return rows.length ? rows.map(rowToJourneyPurposeCard) : defaultJourneyPurposeCards; } catch { return defaultJourneyPurposeCards; } }
+export async function getJourneyPurposeCards(): Promise<JourneyPurposeCard[]> { try { const rows = await getDb().select().from(journeyPurposeCards).where(eq(journeyPurposeCards.active, true)).orderBy(asc(journeyPurposeCards.displayOrder), asc(journeyPurposeCards.id)); return rows.map(rowToJourneyPurposeCard); } catch { return defaultJourneyPurposeCards; } }
 
 export type PublicSettings = {
   phone: string; phoneRaw: string; email: string; address: string; heroTitle: string; heroSubtitle: string;
