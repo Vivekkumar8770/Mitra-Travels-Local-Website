@@ -453,3 +453,4 @@ body:not(:has(.admin-route)) .cta-panel { padding: clamp(2rem, 5vw, 4rem); }
 .crm-lead-form textarea:focus { border-color: #f97316; box-shadow: 0 0 0 3px rgb(249 115 22 / .1); }
 .crm-lead-form .editor-footer { justify-content: flex-end; }
 .badges .status-new{background:#fff1e7;color:#c2410c}.badges .status-contacted{background:#eef4fb;color:#24527d}.badges .status-follow-up{background:#fef3c7;color:#a16207}.badges .status-quoted{background:#ede9fe;color:#6d28d9}.badges .status-converted,.badges .status-confirmed{background:#e9f8ef;color:#16834d}.badges .status-closed{background:#f1f5f9;color:#64748b}
+.faq-trigger>svg{display:none}
