@@ -1,59 +1,29 @@
 import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 import { getDb } from "@/db";
-import { enquiries } from "@/db/schema";
+import { enquiries, leadFollowUps } from "@/db/schema";
 import { requireAdminApi } from "@/lib/admin-auth";
-import { addLocalEnquiry, deleteLocalEnquiry, listLocalEnquiries, updateLocalEnquiry } from "@/lib/local-enquiries";
+import { addLocalEnquiry, addLocalFollowUp, deleteLocalEnquiry, getLocalEnquiry, leadStatuses, listLocalEnquiries, listLocalFollowUps, updateLocalEnquiry } from "@/lib/local-enquiries";
 
 const localDevelopment = process.env.NODE_ENV !== "production";
-
-const enquirySchema = z.object({
-  name: z.string().trim().min(2).max(120), phone: z.string().trim().min(8).max(24), email: z.string().trim().email().or(z.literal("")).optional().default(""), destination: z.string().trim().min(2).max(160), packageName: z.string().trim().max(160).optional().default(""), pickupCity: z.string().trim().max(120).optional().default(""), travelDate: z.string().trim().max(24).optional().default(""), travellers: z.coerce.number().int().min(1).max(60), message: z.string().trim().max(2000).optional().default(""),
+const statuses = z.enum(leadStatuses);
+const leadSchema = z.object({
+  name: z.string().trim().min(2).max(120), phone: z.string().trim().min(8).max(24), alternatePhone: z.string().trim().max(24).optional().default(""), email: z.string().trim().email().or(z.literal("")).optional().default(""), city: z.string().trim().max(120).optional().default(""), state: z.string().trim().max(120).optional().default(""), leadSource: z.string().trim().min(1).max(60).optional().default("Website"), destination: z.string().trim().min(2).max(160), packageName: z.string().trim().max(160).optional().default(""), pickupCity: z.string().trim().max(120).optional().default(""), dropLocation: z.string().trim().max(120).optional().default(""), travelDate: z.string().trim().max(24).optional().default(""), travelEndDate: z.string().trim().max(24).optional().default(""), travellers: z.coerce.number().int().min(1).max(60).optional().default(1), rooms: z.coerce.number().int().min(0).max(60).optional().default(0), budget: z.string().trim().max(100).optional().default(""), message: z.string().trim().max(4000).optional().default(""), status: statuses.optional().default("New"), priority: z.enum(["Hot", "Warm", "Cold"]).optional().default("Warm"), nextFollowUpAt: z.string().trim().max(40).optional().default(""), assignedTo: z.string().trim().max(120).optional().default(""), quotationAmount: z.string().trim().max(100).optional().default(""), bookingStatus: z.string().trim().max(80).optional().default(""), dealValue: z.string().trim().max(100).optional().default(""), outcomeReason: z.string().trim().max(1000).optional().default(""), notes: z.string().trim().max(4000).optional().default(""),
 });
+const followUpSchema = z.object({ enquiryId: z.coerce.number().int().positive(), followUpAt: z.string().trim().min(1).max(40), method: z.enum(["Call", "WhatsApp", "SMS", "Email", "Meeting"]), conversationNotes: z.string().trim().min(1).max(4000), customerResponse: z.string().trim().max(1000).optional().default(""), updatedStatus: statuses.optional().default("Follow-up"), nextFollowUpAt: z.string().trim().max(40).optional().default(""), addedBy: z.string().trim().max(120).optional().default("Administrator") });
 
 export async function POST(request: Request) {
-  try {
-    const parsed = enquirySchema.safeParse(await request.json());
-    if (!parsed.success) return Response.json({ error: "Please check the required fields and try again." }, { status: 400 });
-    if (localDevelopment) return Response.json({ id: addLocalEnquiry(parsed.data).id }, { status: 201 });
-    const [saved] = await getDb().insert(enquiries).values(parsed.data).returning({ id: enquiries.id });
-    return Response.json({ id: saved.id }, { status: 201 });
-  } catch (error) {
-    console.error("Enquiry submission failed", error);
-    return Response.json({ error: "The enquiry service is temporarily unavailable. Please call or WhatsApp us." }, { status: 503 });
+  const body = await request.json();
+  if (body.action === "followUp") {
+    const admin = await requireAdminApi(); if (!admin) return Response.json({ error: "Unauthorized" }, { status: 401 });
+    const parsed = followUpSchema.safeParse(body); if (!parsed.success) return Response.json({ error: "Please complete the follow-up details." }, { status: 400 });
+    if (localDevelopment) { if (!getLocalEnquiry(parsed.data.enquiryId)) return Response.json({ error: "Lead not found" }, { status: 404 }); return Response.json({ item: addLocalFollowUp(parsed.data) }, { status: 201 }); }
+    const db = getDb(); const [saved] = await db.insert(leadFollowUps).values(parsed.data).returning(); await db.update(enquiries).set({ status: parsed.data.updatedStatus, nextFollowUpAt: parsed.data.nextFollowUpAt, updatedAt: new Date().toISOString() }).where(eq(enquiries.id, parsed.data.enquiryId)); return Response.json({ item: saved }, { status: 201 });
   }
+  const parsed = leadSchema.safeParse(body); if (!parsed.success) return Response.json({ error: "Please check the required fields and try again." }, { status: 400 });
+  const isManual = body.action === "manual"; if (isManual && !(await requireAdminApi())) return Response.json({ error: "Unauthorized" }, { status: 401 });
+  try { if (localDevelopment) return Response.json({ id: addLocalEnquiry(parsed.data).id }, { status: 201 }); const [saved] = await getDb().insert(enquiries).values(parsed.data).returning({ id: enquiries.id }); return Response.json({ id: saved.id }, { status: 201 }); } catch { return Response.json({ error: "The enquiry service is temporarily unavailable." }, { status: 503 }); }
 }
-
-export async function GET() {
-  const admin = await requireAdminApi();
-  if (!admin) return Response.json({ error: "Unauthorized" }, { status: 401 });
-  if (localDevelopment) return Response.json({ items: listLocalEnquiries() });
-  try { return Response.json({ items: await getDb().select().from(enquiries).orderBy(desc(enquiries.createdAt)).limit(250) }); }
-  catch (error) { console.error("Enquiry listing failed", error); return Response.json({ items: [], warning: "Database is not ready yet." }); }
-}
-
-export async function PATCH(request: Request) {
-  const admin = await requireAdminApi();
-  if (!admin) return Response.json({ error: "Unauthorized" }, { status: 401 });
-  const parsed = z.object({ id: z.coerce.number().int().positive(), status: z.enum(["New", "Contacted", "Follow-up", "Quoted", "Converted", "Confirmed", "Closed"]), notes: z.string().max(2000).optional().default("") }).safeParse(await request.json());
-  if (!parsed.success) return Response.json({ error: "Invalid update" }, { status: 400 });
-  if (localDevelopment) {
-    if (!updateLocalEnquiry(parsed.data.id, parsed.data.status, parsed.data.notes)) return Response.json({ error: "Enquiry not found" }, { status: 404 });
-    return Response.json({ ok: true });
-  }
-  await getDb().update(enquiries).set({ status: parsed.data.status, notes: parsed.data.notes, updatedAt: new Date().toISOString() }).where(eq(enquiries.id, parsed.data.id));
-  return Response.json({ ok: true });
-}
-
-export async function DELETE(request: Request) {
-  const admin = await requireAdminApi();
-  if (!admin) return Response.json({ error: "Unauthorized" }, { status: 401 });
-  const id = Number(new URL(request.url).searchParams.get("id"));
-  if (!Number.isInteger(id) || id < 1) return Response.json({ error: "Invalid enquiry" }, { status: 400 });
-  if (localDevelopment) {
-    if (!deleteLocalEnquiry(id)) return Response.json({ error: "Enquiry not found" }, { status: 404 });
-    return Response.json({ ok: true });
-  }
-  await getDb().delete(enquiries).where(eq(enquiries.id, id));
-  return Response.json({ ok: true });
-}
+export async function GET(request: Request) { const admin = await requireAdminApi(); if (!admin) return Response.json({ error: "Unauthorized" }, { status: 401 }); const id = Number(new URL(request.url).searchParams.get("id")); if (localDevelopment) { if (id) { const item = getLocalEnquiry(id); return item ? Response.json({ item, followUps: listLocalFollowUps(id) }) : Response.json({ error: "Lead not found" }, { status: 404 }); } return Response.json({ items: listLocalEnquiries() }); } try { const db = getDb(); if (id) { const [item] = await db.select().from(enquiries).where(eq(enquiries.id, id)); if (!item) return Response.json({ error: "Lead not found" }, { status: 404 }); return Response.json({ item, followUps: await db.select().from(leadFollowUps).where(eq(leadFollowUps.enquiryId, id)).orderBy(desc(leadFollowUps.createdAt)) }); } return Response.json({ items: await db.select().from(enquiries).orderBy(desc(enquiries.createdAt)).limit(250) }); } catch { return Response.json({ items: [], warning: "Database is not ready yet." }); } }
+export async function PATCH(request: Request) { const admin = await requireAdminApi(); if (!admin) return Response.json({ error: "Unauthorized" }, { status: 401 }); const parsed = leadSchema.partial().extend({ id: z.coerce.number().int().positive() }).safeParse(await request.json()); if (!parsed.success) return Response.json({ error: "Invalid lead update" }, { status: 400 }); const { id, ...changes } = parsed.data; if (["Lost", "Cancelled", "Not Interested"].includes(changes.status || "") && !changes.outcomeReason) return Response.json({ error: "A reason is required for this outcome." }, { status: 400 }); if (localDevelopment) return updateLocalEnquiry(id, changes) ? Response.json({ ok: true }) : Response.json({ error: "Lead not found" }, { status: 404 }); await getDb().update(enquiries).set({ ...changes, updatedAt: new Date().toISOString() }).where(eq(enquiries.id, id)); return Response.json({ ok: true }); }
+export async function DELETE(request: Request) { const admin = await requireAdminApi(); if (!admin) return Response.json({ error: "Unauthorized" }, { status: 401 }); const id = Number(new URL(request.url).searchParams.get("id")); if (!Number.isInteger(id) || id < 1) return Response.json({ error: "Invalid enquiry" }, { status: 400 }); if (localDevelopment) return deleteLocalEnquiry(id) ? Response.json({ ok: true }) : Response.json({ error: "Enquiry not found" }, { status: 404 }); await getDb().delete(leadFollowUps).where(eq(leadFollowUps.enquiryId, id)); await getDb().delete(enquiries).where(eq(enquiries.id, id)); return Response.json({ ok: true }); }
