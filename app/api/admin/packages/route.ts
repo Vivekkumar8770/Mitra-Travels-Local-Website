@@ -41,6 +41,10 @@ export async function DELETE(request: Request) {
   const [item] = await db.select({ id: tourPackages.id, imageUrl: tourPackages.imageUrl }).from(tourPackages).where(eq(tourPackages.slug, slug)).limit(1);
   if (!item) return Response.json({ error: "Package not found." }, { status: 404 });
   await db.delete(tourPackages).where(eq(tourPackages.id, item.id));
+  const deletedRow = await db.select({ value: siteSettings.value }).from(siteSettings).where(eq(siteSettings.key, "deleted_package_slugs")).limit(1);
+  const deletedSlugs = new Set<string>(JSON.parse(deletedRow[0]?.value || "[]"));
+  deletedSlugs.add(slug);
+  await db.insert(siteSettings).values({ key: "deleted_package_slugs", value: JSON.stringify([...deletedSlugs]) }).onConflictDoUpdate({ target: siteSettings.key, set: { value: JSON.stringify([...deletedSlugs]), updatedAt: new Date().toISOString() } });
   const mediaMatch = item.imageUrl.match(/^\/api\/media\/(\d+)$/);
   if (mediaMatch) {
     const mediaId = Number(mediaMatch[1]);

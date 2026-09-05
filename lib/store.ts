@@ -3,7 +3,7 @@ import { getDb } from "@/db";
 import { blogPostsTable, faqItems, siteSettings, tourPackages } from "@/db/schema";
 import { blogPosts, contact, faqs, packages, type BlogPost, type TourPackage } from "@/lib/content";
 import { getLocalSettings } from "@/lib/local-settings";
-import { listLocalPackages } from "@/lib/local-packages";
+import { getDeletedLocalPackageSlugs, listLocalPackages } from "@/lib/local-packages";
 
 type PackageRow = typeof tourPackages.$inferSelect;
 type BlogRow = typeof blogPostsTable.$inferSelect;
@@ -13,7 +13,20 @@ export function rowToBlog(row: BlogRow): BlogPost { return { id: row.id, slug: r
 
 export async function getAllPackages(): Promise<TourPackage[]> {
   const local = process.env.NODE_ENV !== "production" ? listLocalPackages() : [];
-  try { const rows = await getDb().select().from(tourPackages).orderBy(desc(tourPackages.updatedAt)); const dynamic = [...local, ...rows.map(rowToPackage)]; const dynamicSlugs = new Set(dynamic.map((item) => item.slug)); return [...dynamic, ...packages.filter((item) => !dynamicSlugs.has(item.slug))]; } catch { const localSlugs = new Set(local.map((item) => item.slug)); return [...local, ...packages.filter((item) => !localSlugs.has(item.slug))]; }
+  const deletedLocalSlugs = process.env.NODE_ENV !== "production" ? getDeletedLocalPackageSlugs() : new Set<string>();
+  try {
+    const db = getDb();
+    const rows = await db.select().from(tourPackages).orderBy(desc(tourPackages.updatedAt));
+    const deletedRow = await db.select({ value: siteSettings.value }).from(siteSettings).where(eq(siteSettings.key, "deleted_package_slugs")).limit(1);
+    const deletedRemoteSlugs = safeJson<string[]>(deletedRow[0]?.value || "[]", []);
+    const deletedSlugs = new Set(deletedRemoteSlugs);
+    const dynamic = [...local, ...rows.map(rowToPackage)];
+    const dynamicSlugs = new Set(dynamic.map((item) => item.slug));
+    return [...dynamic, ...packages.filter((item) => !dynamicSlugs.has(item.slug) && !deletedSlugs.has(item.slug) && !deletedLocalSlugs.has(item.slug))];
+  } catch {
+    const localSlugs = new Set(local.map((item) => item.slug));
+    return [...local, ...packages.filter((item) => !localSlugs.has(item.slug) && !deletedLocalSlugs.has(item.slug))];
+  }
 }
 export async function getPublicPackages() { return (await getAllPackages()).filter((item) => item.active); }
 export async function getPackageBySlug(slug: string) { return (await getAllPackages()).find((item) => item.slug === slug && item.active) ?? null; }
