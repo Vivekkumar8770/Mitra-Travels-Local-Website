@@ -521,3 +521,53 @@ body:not(:has(.admin-route)) .cta-panel { padding: clamp(2rem, 5vw, 4rem); }
 .lead-details{display:grid;gap:18px;width:100%;border:1px solid var(--admin-line);border-radius:12px;background:#f8fafc;padding:22px;box-shadow:0 5px 18px rgb(11 37 69 / .045)}.lead-details-header{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;border-bottom:1px solid var(--admin-line);padding-bottom:18px}.lead-details-header>div>span{color:var(--admin-orange);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.lead-details-header h2{margin:4px 0;color:#172033;font-size:25px}.lead-details-header p{margin:0;color:#607086;font-size:12px}.lead-details-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}.lead-details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.lead-detail-card,.lead-history-card{border:1px solid var(--admin-line);border-radius:10px;background:#fff;padding:18px}.lead-detail-card h3,.lead-history-card h3{margin:0 0 14px;color:#172033;font-size:15px}.lead-detail-card dl{display:grid;gap:0;margin:0}.lead-detail-card dl>div{display:grid;grid-template-columns:minmax(115px,.8fr) minmax(0,1.2fr);gap:18px;border-top:1px solid #edf1f4;padding:10px 0}.lead-detail-card dt{color:#607086;font-size:11px;font-weight:700}.lead-detail-card dd{margin:0;color:#172033;font-size:12px;line-height:1.5;overflow-wrap:anywhere}.lead-history-card{display:grid;gap:10px}.lead-history-item{border-top:1px solid #edf1f4;padding:13px 0}.lead-history-item b{color:#172033;font-size:12px}.lead-history-item p{margin:6px 0;color:#3c4d62;font-size:12px;line-height:1.55}.lead-history-item small{color:#718096;font-size:10px;line-height:1.45}
 @media(max-width:900px){.lead-summary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.crm-enquiry-table{min-width:1100px}}
 @media(max-width:640px){.crm-enquiry-page>.admin-section-head{align-items:stretch;flex-direction:column;gap:12px}.crm-enquiry-page>.admin-section-head .admin-btn{justify-content:center;width:100%}.lead-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.lead-summary-grid article{min-height:68px;padding:11px}.lead-summary-grid article:last-child{grid-column:span 2}.lead-summary-grid b{font-size:18px}.lead-summary-grid small{font-size:9px}.crm-enquiry-toolbar{grid-template-columns:1fr 1fr}.crm-enquiry-toolbar .admin-search{grid-column:1 / -1}.crm-table-scroll{overflow:visible;border:0;background:transparent;box-shadow:none}.crm-enquiry-table,.crm-enquiry-table tbody,.crm-enquiry-table tr,.crm-enquiry-table td{display:block;min-width:0;width:100%}.crm-enquiry-table thead{display:none}.crm-enquiry-table tr{position:relative;border:1px solid var(--admin-line);border-radius:10px;background:#fff;margin-bottom:10px;padding:14px 112px 12px 14px;box-shadow:0 3px 10px rgb(11 37 69 / .04)}.crm-enquiry-table td{height:auto!important;min-width:0!important;max-width:none!important;border:0!important;padding:3px 0!important;overflow:visible!important;text-overflow:clip!important;white-space:normal!important}.crm-enquiry-table td:nth-child(1){color:#607086;font-size:10px;font-weight:800}.crm-enquiry-table td:nth-child(2){padding-top:6px!important;color:#172033;font-size:15px}.crm-enquiry-table td:nth-child(4){font-size:12px}.crm-enquiry-table td:nth-child(7),.crm-enquiry-table td:nth-child(8){display:inline-block;width:auto;padding:7px 5px 4px 0!important}.crm-enquiry-table td:nth-child(9){font-size:11px}.crm-enquiry-table td:nth-child(10),.crm-enquiry-table td:nth-child(11){display:none}.crm-enquiry-table td:last-child{position:absolute;right:9px;top:11px;display:flex;width:96px!important;min-width:96px!important;background:transparent;box-shadow:none;padding:0!important}.crm-enquiry-table td:last-child .admin-icon-btn{display:none}.crm-enquiry-table td:last-child .lead-view-button{min-width:82px}.crm-pagination{align-items:flex-start;flex-direction:column}.crm-pagination>div{width:100%;justify-content:space-between}.crm-advanced-filters{grid-template-columns:1fr}.lead-details{padding:14px}.lead-details-header{grid-template-columns:1fr;align-items:flex-start}.lead-details-header h2{font-size:21px}.lead-details-actions{justify-content:flex-start}.lead-details-actions .admin-btn{flex:1}.lead-details-grid{grid-template-columns:1fr}.lead-detail-card dl>div{grid-template-columns:1fr;gap:3px}.lead-detail-card dd{font-size:13px}}
+
+/* Full-width admin workspace */
+.admin-app{--sidebar-width:272px;width:100%;min-width:0}.admin-sidebar{width:var(--sidebar-width);min-height:100vh}.admin-main{width:calc(100% - var(--sidebar-width));min-width:0;min-height:100vh;margin-left:var(--sidebar-width);flex:none}.admin-content{width:100%;max-width:none;margin:0;padding:28px 32px}.admin-content>section,.admin-content>.admin-editor,.admin-content>.hero-manager,.admin-content>.admin-panel{width:100%;max-width:none}.hero-manager,.settings-panel,.crm-lead-form{width:100%;max-width:none}.hero-manager-grid,.lead-details,.lead-details-grid,.admin-grid-2,.crm-grid,.admin-stat-grid,.crm-stat-grid,.media-grid{width:100%}.lead-details-grid{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}.lead-detail-card{height:100%}
+@media(max-width:1100px){.admin-app{--sidebar-width:244px}.admin-content{padding:24px}}
+@media(max-width:800px){.admin-app{--sidebar-width:0px}.admin-sidebar{width:286px}.admin-main{width:100%;margin-left:0}.admin-content{padding:20px 16px}.hero-manager-grid,.lead-details-grid,.admin-grid-2,.crm-grid{grid-template-columns:1fr}}
+@media(max-width:520px){.admin-content{padding:16px 12px}}
+
+
+html,
+body,
+#root {
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+}
+
+.admin-app {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.admin-main {
+    min-height: 100vh;
+    background: #f5f7fa;
+}
+
+.admin-topbar {
+    width: 100%;
+}
+
+.admin-content {
+    min-height: calc(100vh - 82px);
+}
+
+.admin-content > * {
+    width: 100%;
+    max-width: none;
+}
+
+.admin-panel,
+.admin-editor,
+.admin-card,
+.lead-details,
+.crm-lead-form,
+.settings-panel,
+.admin-table-wrapper {
+    width: 100%;
+    max-width: none;
+}
