@@ -382,7 +382,7 @@ body:not(:has(.admin-route)) .cta-panel { padding: clamp(2rem, 5vw, 4rem); }
   .package-fact-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .package-fact-grid > div { padding: 1rem; }
   .package-detail-layout { grid-template-columns: 1fr; gap: 2rem; }
-  .package-detail-aside { position: static; order: -1; }
+  .package-detail-aside { position: static; order: 0; }
   .highlight-grid, .package-inclusions { grid-template-columns: 1fr; }
   .itinerary-timeline::before { left: 19px; }
   .itinerary-day { grid-template-columns: 40px minmax(0, 1fr); gap: .75rem; }
