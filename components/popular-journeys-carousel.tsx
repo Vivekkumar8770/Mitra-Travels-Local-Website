@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { PackageCard } from "@/components/package-card";
@@ -8,6 +8,34 @@ import type { TourPackage } from "@/lib/content";
 
 export function PopularJourneysCarousel({ items }: { items: TourPackage[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track || items.length < 2) return;
+    const carouselTrack = track;
+    const mobile = window.matchMedia("(max-width: 767px)");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let timer: number | undefined;
+
+    function start() {
+      if (!mobile.matches || reducedMotion.matches) return;
+      timer = window.setInterval(() => {
+        const firstSlide = carouselTrack.querySelector<HTMLElement>(".popular-carousel-slide");
+        const step = firstSlide ? firstSlide.offsetWidth + 14 : carouselTrack.clientWidth;
+        const atEnd = carouselTrack.scrollLeft + carouselTrack.clientWidth >= carouselTrack.scrollWidth - 4;
+        carouselTrack.scrollTo({ left: atEnd ? 0 : carouselTrack.scrollLeft + step, behavior: "smooth" });
+      }, 4200);
+    }
+
+    function stop() {
+      if (timer !== undefined) window.clearInterval(timer);
+    }
+
+    start();
+    mobile.addEventListener("change", stop);
+    reducedMotion.addEventListener("change", stop);
+    return () => { stop(); mobile.removeEventListener("change", stop); reducedMotion.removeEventListener("change", stop); };
+  }, [items.length]);
 
   function move(direction: "prev" | "next") {
     trackRef.current?.scrollBy({ left: direction === "next" ? 380 : -380, behavior: "smooth" });
